@@ -1,6 +1,6 @@
 [workspace]
 
 members = [
-  "mediator",
+  "mediator-recommended",
   "mediator-like-in-go",
 ]
