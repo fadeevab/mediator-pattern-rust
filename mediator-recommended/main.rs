@@ -1,14 +1,14 @@
-mod railway_station;
+mod train_station;
 mod trains;
 
-use railway_station::RailwayStation;
+use train_station::TrainStation;
 use trains::{FreightTrain, PassengerTrain};
 
 fn main() {
     let train1 = PassengerTrain::new("Train 1");
     let train2 = FreightTrain::new("Train 2");
 
-    let mut station = RailwayStation::default();
+    let mut station = TrainStation::default();
 
     station.accept(train1);
     station.accept(train2);

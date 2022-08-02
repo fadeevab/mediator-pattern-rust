@@ -1,9 +1,9 @@
-mod railway_station;
+mod train_station;
 mod trains;
 
 use std::{cell::RefCell, rc::Rc};
 
-use railway_station::StationManager;
+use train_station::StationManager;
 use trains::{FreightTrain, PassengerTrain, Train};
 
 fn main() {

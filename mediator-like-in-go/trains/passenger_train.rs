@@ -1,7 +1,7 @@
 use std::{cell::RefCell, rc::Rc};
 
 use super::Train;
-use crate::railway_station::Mediator;
+use crate::train_station::Mediator;
 
 pub struct PassengerTrain {
     name: String,

@@ -8,13 +8,13 @@ pub trait Mediator {
 }
 
 #[derive(Default)]
-pub struct RailwayStation {
+pub struct TrainStation {
     trains: HashMap<String, Box<dyn Train>>,
     train_queue: VecDeque<String>,
     train_on_platform: Option<String>,
 }
 
-impl Mediator for RailwayStation {
+impl Mediator for TrainStation {
     fn notify_about_arrival(&mut self, train_name: &str) -> bool {
         if self.train_on_platform.is_some() {
             self.train_queue.push_back(train_name.into());
@@ -40,7 +40,7 @@ impl Mediator for RailwayStation {
     }
 }
 
-impl RailwayStation {
+impl TrainStation {
     pub fn accept(&mut self, mut train: impl Train + 'static) {
         if self.trains.contains_key(train.name()) {
             println!("{} has already arrived", train.name());

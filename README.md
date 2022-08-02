@@ -1,21 +1,21 @@
 # Mediator Patter in Rust
 
-_*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what the ways** are there to implement Mediator in Rust.
+_*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what ways** are there to implement Mediator in Rust.
 
 By definition, [Mediator][1] restricts direct communications between the objects and forces them to collaborate only via a mediator object. It also stands for a Controller in the MVC pattern. Let's see the nice diagrams from https://refactoring.guru:
 
-| Problem | Solution |
-|---------|----------|
-|![image](https://user-images.githubusercontent.com/5967447/182462245-cec68da8-73a9-4abf-9c18-dd5303d919fb.png)|![image](https://user-images.githubusercontent.com/5967447/182462302-c7ba0c25-095e-47af-ac8a-9a560a987036.png)|
+| Problem                    | Solution                    |
+|----------------------------|-----------------------------|
+|![image](images/problem.png)|![image](images/solution.png)|
 
 ## Problem
 
-A common implementation in object-oriented languages looks like the following (pseudocode!):
+A common implementation in object-oriented languages looks like the following (pseudo-code!):
 
 ```java
 Controller controller = new Controller();
 
-// Every compenent has a link to a mediator (controller).
+// Every component has a link to a mediator (controller).
 component1.setController(controller);
 component2.setController(controller);
 component3.setController(controller);
@@ -30,11 +30,11 @@ Now, let's read this in **Rust** terms: _"**mutable** structures have **mutable*
 
 Basically, you can start to imagine the unfair battle against the Rust compiler and its borrow checker. It seems like a solution introduces more problems:
 
-![image](https://user-images.githubusercontent.com/5967447/182466067-fa4f7b25-58bb-4272-be8d-b0a19c0c50f0.png)
+![image](images/mediator-mut-problem.png)
 
-1. Imagine that the control flow starts at the point 1 (Checkbox) where the 1st **mutable** borrow happens.
-2. The mediator (Dialog) interacts with another object at the point 2 (TextField).
-3. The TextField notifies the Dialog back about finishing job and that leads to a **mutable** action at the point 3... Bang!
+1. Imagine that the control flow starts at point 1 (Checkbox) where the 1st **mutable** borrow happens.
+2. The mediator (Dialog) interacts with another object at point 2 (TextField).
+3. The TextField notifies the Dialog back about finishing a job and that leads to a **mutable** action at point 3... Bang!
 
 The second mutable borrow breaks the compilation with an error (the first borrow was on the point 1).
 
@@ -42,7 +42,7 @@ The second mutable borrow breaks the compilation with an error (the first borrow
 
 ## Existing Primers
 
-You might see a reference Mediator examples in Rust like [this][5]: the example is too much synthetic - there is not mutable operations, at least at the level of the trait methods.
+You might see a reference Mediator examples in Rust like [this][5]: the example is too much synthetic - there are no mutable operations, at least at the level of trait methods.
 
 The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repository doesn't include a referenced Mediator pattern implementation as of now, see the [Issue #233][2].
 
@@ -50,9 +50,9 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 ## Option 1 (1st Try): Direct implementation "like in OOP"
 
-There is an example of a [Railway Station manager example][4] in Go language.
+There is an example of a [Station Manager example in Go][4].
 
-👉 I managed to implement it in Rust: [mediator-like-in-go](https://github.com/fadeevab/mediator-pattern-rust/mediator-like-in-go)
+👉 Here is my direct Rust implementation: [mediator-like-in-go](https://github.com/fadeevab/mediator-pattern-rust/mediator-like-in-go)
 
 ⚠ I wouldn't recommend this approach, however, I think it's a good reference of how the Rust compiler could be tricked.
 
@@ -63,17 +63,18 @@ Key points:
 
 ## Option 2: Rust Idiomatic Approach
 
-⚠ The key point is thinking about OWNERSHIP.
+⚠ The key point is thinking in terms of OWNERSHIP.
 
-1. Mediator takes ownership over all other objects (components).
-2. Components don't store a reference to a mediator, instead, they get the reference via a callback.
-3. Control flow start from the Mediator.
+1. A mediator takes ownership of all components.
+2. A component doesn't preserve a reference to a mediator. Instead, it gets the reference via a method call.
+3. Control flow starts from the `fn main()` where the mediator receives external events/commands.
+4. Mediator trait for the interaction between components is not the same as its external API for receiving external events (commands from the main loop).
 
-![Ownership](https://user-images.githubusercontent.com/5967447/182478197-ae4f5969-a46e-4c32-9948-b356793a05ed.jpg)
+![Ownership](images/mediator-rust-approach.jpg)
 
-A few changes of the direct approach lead to a safe mutability checked in compilation time.
+A few changes to the direct approach leads to a safe mutability being checked at compilation time.
 
-👉 Railway Station example reworked **without** `Rc`, `RefCell` tricks, but **with** `&mut self` and compiler-time borrow checking: https://github.com/fadeevab/mediator-pattern-rust/mediator.
+👉 A Train Station primer **without** `Rc`, `RefCell` tricks, but **with** `&mut self` and compiler-time borrow checking: https://github.com/fadeevab/mediator-pattern-rust/mediator-recommended.
 
 [1]: https://refactoring.guru/design-patterns/mediator
 [2]: https://github.com/rust-unofficial/patterns/issues/233
