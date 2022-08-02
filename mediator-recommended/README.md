@@ -11,4 +11,8 @@ The key point is thinking in terms of OWNERSHIP.
 
 See the full article: [README.md](../README.md).
 
+👉 A real-world example of such approach: [Cursive (TUI)][5].
+
 ![Ownership model in Rust](../images/mediator-rust-approach.jpg)
+
+[5]: https://crates.io/crates/cursive

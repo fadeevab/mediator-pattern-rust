@@ -4,9 +4,9 @@ _*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why
 
 By definition, [Mediator][1] restricts direct communications between the objects and forces them to collaborate only via a mediator object. It also stands for a Controller in the MVC pattern. Let's see the nice diagrams from https://refactoring.guru:
 
-| Problem                    | Solution                    |
-|----------------------------|-----------------------------|
-|![image](images/problem.png)|![image](images/solution.png)|
+| Problem                      | Solution                      |
+| ---------------------------- | ----------------------------- |
+| ![image](images/problem.png) | ![image](images/solution.png) |
 
 ## Problem
 
@@ -65,16 +65,18 @@ Key points:
 
 ⚠ The key point is thinking in terms of OWNERSHIP.
 
+![Ownership](images/mediator-rust-approach.jpg)
+
 1. A mediator takes ownership of all components.
 2. A component doesn't preserve a reference to a mediator. Instead, it gets the reference via a method call.
 3. Control flow starts from the `fn main()` where the mediator receives external events/commands.
 4. Mediator trait for the interaction between components is not the same as its external API for receiving external events (commands from the main loop).
 
-![Ownership](images/mediator-rust-approach.jpg)
-
 A few changes to the direct approach leads to a safe mutability being checked at compilation time.
 
 👉 A Train Station primer **without** `Rc`, `RefCell` tricks, but **with** `&mut self` and compiler-time borrow checking: https://github.com/fadeevab/mediator-pattern-rust/mediator-recommended.
+
+👉 A real-world example of such approach: [Cursive (TUI)][5].
 
 [1]: https://refactoring.guru/design-patterns/mediator
 [2]: https://github.com/rust-unofficial/patterns/issues/233
