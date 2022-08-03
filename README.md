@@ -1,4 +1,4 @@
-# Mediator Patter in Rust
+# Mediator Pattern in Rust
 
 _*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what ways** are there to implement Mediator in Rust.
 
