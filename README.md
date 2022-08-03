@@ -2,6 +2,8 @@
 
 _*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what ways** are there to implement Mediator in Rust.
 
+A typical Mediator implementation in other languages is a classic anti-pattern in Rust: many objects hold mutable cross-references on each other, trying to mutate each other, which is a deadly sin in Rust - the compiler won't pass your first naive implementation unless it's oversimplified.
+
 By definition, [Mediator][1] restricts direct communications between the objects and forces them to collaborate only via a mediator object. It also stands for a Controller in the MVC pattern. Let's see the nice diagrams from https://refactoring.guru:
 
 | Problem                      | Solution                      |
