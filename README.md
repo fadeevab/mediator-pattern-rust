@@ -50,11 +50,11 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 **Nevertheless, we don't surrender.**
 
-## 1st Try: `Rc<RefCell<..>>` Hidden Under Read-Only Methods
+## The 1st Try: Cross-Referencing with `Rc<RefCell<..>>`
 
 There is an example of a [Station Manager example in Go][4]. Trying to convert it into Rust with a direct approach leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
 
-👉 Here is a Rust implementation: [mediator-like-in-go](https://github.com/fadeevab/mediator-pattern-rust/mediator-like-in-go)
+👉 Here is a Rust implementation: [mediator-dynamic](https://github.com/fadeevab/mediator-pattern-rust/mediator-dynamic)
 
 ⚠ I wouldn't recommend this approach, however, I think it's a good reference of how the Rust compiler could be tricked.
 
@@ -76,7 +76,7 @@ Key points:
 
 A few changes to the direct approach leads to a safe mutability being checked at compilation time.
 
-👉 A Train Station primer **without** `Rc`, `RefCell` tricks, but **with** `&mut self` and compiler-time borrow checking: https://github.com/fadeevab/mediator-pattern-rust/mediator-recommended.
+👉 A Train Station primer **without** `Rc`, `RefCell` tricks, but **with** `&mut self` and compiler-time borrow checking: https://github.com/fadeevab/mediator-pattern-rust/mediator-static-recommended.
 
 👉 A real-world example of such approach: [Cursive (TUI)][5].
 
