@@ -1,6 +1,6 @@
 # Mediator Pattern
 
-## Rust Idiomatic Approach
+## Top-Down Ownership
 
 The key point is thinking in terms of OWNERSHIP.
 

@@ -1,6 +1,8 @@
-# Mediator like in Go example
+# Mediator
 
-A direct (naive?) implementation with Rust of a [Railway Station manager example in Go][4].
+## Mimicking a Typical OOP Example
+
+This is a direct (naive?) implementation with Rust of a [Station Manager example in Go][4].
 
 ⚠ I wouldn't recommend this approach, however, I think it's a good reference of how the Rust compiler could be tricked.
 
