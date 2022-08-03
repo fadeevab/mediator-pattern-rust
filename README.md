@@ -50,7 +50,7 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 **Nevertheless, we don't surrender.**
 
-## Option 1 (1st Try): `Rc<RefCell<..>>` Hidden Under Read-Only Methods
+## 1st Try: `Rc<RefCell<..>>` Hidden Under Read-Only Methods
 
 There is an example of a [Station Manager example in Go][4]. Trying to convert it into Rust with a direct approach leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
 
@@ -63,7 +63,7 @@ Key points:
 1. All trait methods are **read-only**: immutable `self` and immutable parameters.
 2. `Rc`, `RefCell` are extensively used under the hood to take responsibility for the mutable borrowing from compiler to runtime. Invalid implementation will lead to panic in runtime.
 
-## Option 2: Top-Down Ownership
+## Top-Down Ownership
 
 ☝ The key point is thinking in terms of OWNERSHIP.
 
