@@ -50,22 +50,22 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 **Nevertheless, we don't surrender.**
 
-## Option 1 (1st Try): Direct implementation "like in OOP"
+## Option 1 (1st Try): `Rc<RefCell<..>>` Hidden Under Read-Only Methods
 
-There is an example of a [Station Manager example in Go][4].
+There is an example of a [Station Manager example in Go][4]. Trying to convert it into Rust with a direct approach leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
 
-👉 Here is my direct Rust implementation: [mediator-like-in-go](https://github.com/fadeevab/mediator-pattern-rust/mediator-like-in-go)
+👉 Here is a Rust implementation: [mediator-like-in-go](https://github.com/fadeevab/mediator-pattern-rust/mediator-like-in-go)
 
 ⚠ I wouldn't recommend this approach, however, I think it's a good reference of how the Rust compiler could be tricked.
 
 Key points:
 
-1. All methods are read-only: immutable `self` and parameters.
+1. All trait methods are **read-only**: immutable `self` and immutable parameters.
 2. `Rc`, `RefCell` are extensively used under the hood to take responsibility for the mutable borrowing from compiler to runtime. Invalid implementation will lead to panic in runtime.
 
-## Option 2: Rust Idiomatic Approach
+## Option 2: Top-Down Ownership
 
-⚠ The key point is thinking in terms of OWNERSHIP.
+☝ The key point is thinking in terms of OWNERSHIP.
 
 ![Ownership](images/mediator-rust-approach.jpg)
 
