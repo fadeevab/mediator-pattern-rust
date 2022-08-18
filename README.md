@@ -2,6 +2,28 @@
 
 _*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what ways** are there to implement Mediator in Rust.
 
+## How to Run
+
+```bash
+cargo run --bin mediator-dynamic
+cargo run --bin mediator-static-recommended
+```
+
+## Execution Result
+
+Output of the `mediator-static-recommended`.
+
+```
+Passenger train Train 1: Arrived
+Freight train Train 2: Arrival blocked, waiting
+Passenger train Train 1: Leaving
+Freight train Train 2: Arrived
+Freight train Train 2: Leaving
+'Train 3' is not on the station!
+```
+
+## Problem
+
 A typical Mediator implementation in other languages is a classic anti-pattern in Rust: many objects hold mutable cross-references on each other, trying to mutate each other, which is a deadly sin in Rust - the compiler won't pass your first naive implementation unless it's oversimplified.
 
 By definition, [Mediator][1] restricts direct communications between the objects and forces them to collaborate only via a mediator object. It also stands for a Controller in the MVC pattern. Let's see the nice diagrams from https://refactoring.guru:
@@ -10,9 +32,7 @@ By definition, [Mediator][1] restricts direct communications between the objects
 | ---------------------------- | ----------------------------- |
 | ![image](images/problem.png) | ![image](images/solution.png) |
 
-## Problem
-
-A common implementation in object-oriented languages looks like the following (pseudo-code!):
+A common implementation in object-oriented languages looks like the following pseudo-code:
 
 ```java
 Controller controller = new Controller();
@@ -50,9 +70,9 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 **Nevertheless, we don't surrender.**
 
-## The 1st Try: Cross-Referencing with `Rc<RefCell<..>>`
+## Cross-Referencing with `Rc<RefCell<..>>`
 
-There is an example of a [Station Manager example in Go][4]. Trying to convert it into Rust with a direct approach leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
+There is an example of a [Station Manager example in Go][4]. Trying to make it with Rust leads leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
 
 👉 Here is a Rust implementation: [mediator-dynamic](https://github.com/fadeevab/mediator-pattern-rust/mediator-dynamic)
 
@@ -71,8 +91,40 @@ Key points:
 
 1. A mediator takes ownership of all components.
 2. A component doesn't preserve a reference to a mediator. Instead, it gets the reference via a method call.
-3. Control flow starts from the `fn main()` where the mediator receives external events/commands.
-4. Mediator trait for the interaction between components is not the same as its external API for receiving external events (commands from the main loop).
+    ```rust
+    // A train gets a mediator object by reference.
+    pub trait Train {
+        fn name(&self) -> &String;
+        fn arrive(&mut self, mediator: &mut dyn Mediator);
+        fn depart(&mut self, mediator: &mut dyn Mediator);
+    }
+
+    // Mediator has notification methods.
+    pub trait Mediator {
+        fn notify_about_arrival(&mut self, train_name: &str) -> bool;
+        fn notify_about_departure(&mut self, train_name: &str);
+    }
+    ```
+3. Control flow starts from `fn main()` where the mediator receives external events/commands.
+4. `Mediator` trait for the interaction between components (`notify_about_arrival`, `notify_about_departure`) is not the same as its external API for receiving external events (`accept`, `depart` commands from the main loop).
+    ```rust
+    let train1 = PassengerTrain::new("Train 1");
+    let train2 = FreightTrain::new("Train 2");
+
+    // Station has `accept` and `depart` methods,
+    // but it also implements `Mediator`.
+    let mut station = TrainStation::default();
+
+    // Station is taking ownership of the trains.
+    station.accept(train1);
+    station.accept(train2);
+
+    // `train1` and `train2` have been moved inside,
+    // but we can use train names to depart them.
+    station.depart("Train 1");
+    station.depart("Train 2");
+    station.depart("Train 3");
+    ```
 
 A few changes to the direct approach leads to a safe mutability being checked at compilation time.
 
