@@ -1,3 +1,5 @@
+_For other design patterns in Rust, see [https://github.com/fadeevab/design-patterns-rust](https://github.com/fadeevab/design-patterns-rust)._
+
 # Mediator Pattern in Rust
 
 _*Mediator* is a challenging pattern to be implemented in *Rust*._ Here is **why** and **what ways** are there to implement Mediator in Rust.
