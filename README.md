@@ -74,7 +74,7 @@ The [rust-unofficial/patterns](https://github.com/rust-unofficial/patterns) repo
 
 ## Cross-Referencing with `Rc<RefCell<..>>`
 
-There is an example of a [Station Manager example in Go][4]. Trying to make it with Rust leads leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
+There is an example of a [Station Manager example in Go][4]. Trying to make it with Rust leads to mimicking a typical OOP through reference counting and borrow checking with mutability in runtime (which has quite unpredictable behavior in runtime with panics here and there).
 
 👉 Here is a Rust implementation: [mediator-dynamic](https://github.com/fadeevab/mediator-pattern-rust/mediator-dynamic)
 
